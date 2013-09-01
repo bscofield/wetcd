@@ -7,3 +7,5 @@
     ip: 192.168.10.10
 
 - include: "~/Projects/ansible/nginx.yml"
+  vars:
+    app: wetcd
