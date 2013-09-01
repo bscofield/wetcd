@@ -18,12 +18,25 @@
       </div>
     </div>
   </div>
-      
-  <div class="container">
-    <h2>keys</h2>
 
-    {{outlet}}
+  <div class="container">
+  {{ outlet }}
   </div>
+  </script>
+      
+  <script type="text/x-handlebars" id="keys">
+  <h3>keys</h3>
+
+  <dl>
+  {{#each}}
+  {{#if dir}}
+    <dt>{{key}}</dt>
+  {{else}}
+    <dt>{{key}}</dt>
+    <dd>{{value}}</dd>
+  {{/if}}
+  {{/each}}
+  </dl>
   </script>
 
   <script src="js/libs/jquery-1.9.1.js"></script>
