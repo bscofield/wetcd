@@ -1,0 +1,5 @@
+---
+- name: Set up VM for wetcd
+  hosts: vagrant
+- include: "~/Projects/ansible/etcd.yml"
+- include: "~/Projects/ansible/nginx.yml"

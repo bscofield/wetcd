@@ -13,7 +13,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.provision :ansible do |ansible|
     ansible.sudo = true
-    ansible.playbook = "../ansible/nginx.yml"
+    ansible.playbook = "playbook.yml"
     ansible.inventory_file = "ansible_hosts"
   end
 end
