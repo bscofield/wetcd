@@ -1,0 +1,29 @@
+server {
+  listen      *:80;
+
+  server_name {{ app }};
+  root        /var/www/{{ app }}/public;
+
+  client_max_body_size 10000k;
+
+  location / {
+    access_log  /var/log/nginx/{{ app }}.log;
+
+    root      /var/www/{{ app }}/public;
+    index     index.html;
+  }
+
+  location ^~ /v1/keys {
+    access_log /var/log/nginx/etcd.log;
+
+    proxy_pass        http://etcd;
+    proxy_set_header  X-Real-IP  $remote_addr;
+    proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header  Host $http_host;
+    proxy_redirect    off;
+  }
+}
+
+upstream etcd {
+  server {{ ip }}:4001;
+}

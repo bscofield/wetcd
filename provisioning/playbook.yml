@@ -9,3 +9,8 @@
 - include: "~/Projects/ansible/nginx.yml"
   vars:
     app: wetcd
+
+- include: "etcd-nginx.yml"
+  vars:
+    app: wetcd
+    ip: 192.168.10.10

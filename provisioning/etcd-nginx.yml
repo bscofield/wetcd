@@ -1,0 +1,10 @@
+---
+- name: Set up nginx to proxy to etcd
+  hosts: vagrant
+  tasks:
+    - name: Replace default nginx config
+      template: src=nginx.etcd.conf.j2
+                dest=/etc/nginx/sites-available/site
+        
+    - name: Restart nginx
+      command: restart nginx
