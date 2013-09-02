@@ -29,16 +29,20 @@
 
   <dl>
   {{#each}}
-  {{#if dir}}
-    <dt>{{#link-to 'key' key}}{{key}}{{/link-to}}</dt>
-  {{else}}
-    <dt>{{key}}</dt>
-    <dd>{{value}}</dd>
-  {{/if}}
+    {{ partial "key" }}
   {{else}}
     <p>Loading...</p>
   {{/each}}
   </dl>
+  </script>
+  
+  <script type="text/x-handlebars" id="key">
+  {{#if dir}}
+    <dt>{{#link-to 'keys' key_path}}{{key}}{{/link-to}}</dt>
+  {{else}}
+    <dt>{{key}}</dt>
+    <dd>{{value}}</dd>
+  {{/if}}
   </script>
 
   <script src="js/libs/jquery-1.9.1.js"></script>
