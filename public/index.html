@@ -30,11 +30,13 @@
   <dl>
   {{#each}}
   {{#if dir}}
-    <dt>{{key}}</dt>
+    <dt>{{#link-to 'key' key}}{{key}}{{/link-to}}</dt>
   {{else}}
     <dt>{{key}}</dt>
     <dd>{{value}}</dd>
   {{/if}}
+  {{else}}
+    <p>Loading...</p>
   {{/each}}
   </dl>
   </script>
