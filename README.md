@@ -1,1 +1,1 @@
-A simple UI for etcd
+A simple UI for [etcd](https://github.com/coreos/etcd)
