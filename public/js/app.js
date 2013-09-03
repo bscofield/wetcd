@@ -4,6 +4,11 @@ Wetcd.Router.map(function() {
   this.resource('keys', { path: '*key' });
 });
 
+Wetcd.Key = Ember.Object.extend({
+  editing: false,
+  key_path: ''
+});
+
 Wetcd.Etcd = Ember.Object.extend({});
 Wetcd.Etcd.reopenClass({
   keys: function(key) {
@@ -16,18 +21,17 @@ Wetcd.Etcd.reopenClass({
       var data = $.parseJSON(response);
       if (Ember.isArray(data)) {
         data.forEach(function (k) {
-          k['key_path'] = 'keys'+k['key']
-          list.pushObject(k);
+          k['key_path'] = 'keys'+k['key'];
+          list.pushObject(Wetcd.Key.create(k));
         });
       } else {
-        data['key_path'] = 'keys'+data['key']
-        list.pushObject(data);
+        data['key_path'] = 'keys'+data['key'];
+        list.pushObject(Wetcd.Key.create(data));
       }
     });
     return list;
   }
 });
-
 
 Wetcd.IndexRoute = Ember.Route.extend({
   redirect: function() {
@@ -38,5 +42,16 @@ Wetcd.IndexRoute = Ember.Route.extend({
 Wetcd.KeysRoute = Ember.Route.extend({
   model: function(params) {
     return Wetcd.Etcd.keys(params.key);
+  }
+});
+
+Wetcd.KeyController = Ember.ObjectController.extend({
+  actions: {
+    edit: function() {
+      this.set('editing', true);
+    },
+    save: function() {
+      this.set('editing', false);
+    }
   }
 });

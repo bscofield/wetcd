@@ -25,24 +25,52 @@
   </script>
 
   <script type="text/x-handlebars" id="keys">
-  <h3>keys</h3>
 
-  <dl>
-  {{#each}}
+  <table>
+  {{#each itemController="key"}}
     {{ partial "key" }}
   {{else}}
-    <p>Loading...</p>
+    <tr><td>
+      <p>Loading...</p>
+    </td></tr>
   {{/each}}
-  </dl>
+  </table>
   </script>
 
   <script type="text/x-handlebars" id="key">
-  {{#if dir}}
-    <dt>{{#link-to 'keys' key_path}}{{key}}{{/link-to}}</dt>
-  {{else}}
-    <dt>{{key}}</dt>
-    <dd>{{value}}</dd>
-  {{/if}}
+    <tr>
+    {{#if dir}}
+      <td></td>
+      <td class="key"><strong>{{#link-to 'keys' key_path}}{{key}} &raquo;{{/link-to}}</strong></td>
+      <td></td>
+    {{else}}
+      <td>
+      {{#if editing}}
+        <button {{ action 'save' }} class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-save"></span></button>
+      {{else}}
+        <button {{ action 'edit' }} class="btn btn-link btn-sm"><span class="glyphicon glyphicon-pencil"></span></button>
+      {{/if}}
+      </td>
+      <td class="key">
+      {{#if editing}}
+        {{input type="text" name="key" value=key}}
+      {{else}}
+        <strong>{{key}}</strong>
+      {{/if}}
+      </td>
+      <td>
+      {{#if editing}}
+        {{input type="text" name="value" value=value}}
+      {{else}}
+        {{value}}
+      {{/if}}
+      </td>
+
+      <td>
+        <button {{ action 'delete' }} class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-trash"></span></button>
+      </td>
+    {{/if}}
+    </tr>
   </script>
 
   <script src="js/libs/jquery-1.9.1.js"></script>
