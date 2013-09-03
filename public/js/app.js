@@ -9,8 +9,10 @@ Wetcd.Key = Ember.Object.extend({
   key_path: '',
 
   save: function(new_value) {
-    $.post("/v1/" + this.key_path, {value: new_value});
-    this.set('value', new_value);
+    if (this.value != new_value) {
+      $.post("/v1/" + this.key_path, {value: new_value});
+      this.set('value', new_value);
+    }
   }
 });
 
