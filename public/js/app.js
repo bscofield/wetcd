@@ -6,7 +6,12 @@ Wetcd.Router.map(function() {
 
 Wetcd.Key = Ember.Object.extend({
   editing: false,
-  key_path: ''
+  key_path: '',
+
+  save: function(new_value) {
+    $.post("/v1/" + this.key_path, {value: new_value});
+    this.set('value', new_value);
+  }
 });
 
 Wetcd.Etcd = Ember.Object.extend({});
@@ -17,7 +22,7 @@ Wetcd.Etcd.reopenClass({
 
     var list = Em.A();
 
-    $.get("http://192.168.10.10/v1/" + path, function(response) {
+    $.get("/v1/" + path, function(response) {
       var data = $.parseJSON(response);
       if (Ember.isArray(data)) {
         data.forEach(function (k) {
@@ -51,7 +56,16 @@ Wetcd.KeyController = Ember.ObjectController.extend({
       this.set('editing', true);
     },
     save: function() {
+      this.content.save(this.get('value'));
       this.set('editing', false);
     }
   }
 });
+
+Wetcd.EditValueView = Ember.TextField.extend({
+  didInsertElement: function () {
+    this.$().focus();
+  }
+});
+
+Ember.Handlebars.helper('edit-value', Wetcd.EditValueView);

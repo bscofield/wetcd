@@ -52,15 +52,11 @@
       {{/if}}
       </td>
       <td class="key">
-      {{#if editing}}
-        {{input type="text" name="key" value=key}}
-      {{else}}
         <strong>{{key}}</strong>
-      {{/if}}
       </td>
       <td>
       {{#if editing}}
-        {{input type="text" name="value" value=value}}
+        {{edit-value class="edit" value=value insert-newline="save"}}
       {{else}}
         {{value}}
       {{/if}}
