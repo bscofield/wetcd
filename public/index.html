@@ -58,12 +58,16 @@
       {{#if editing}}
         {{edit-value class="edit" value=value insert-newline="save"}}
       {{else}}
-        {{value}}
+        {{{value}}}
       {{/if}}
       </td>
 
       <td>
-        <button {{ action 'delete' }} class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-trash"></span></button>
+        {{#if deleted}}
+
+        {{else}}
+          <button {{ action 'delete' }} class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-trash"></span></button>
+        {{/if}}
       </td>
     {{/if}}
     </tr>

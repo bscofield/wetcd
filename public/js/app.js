@@ -5,6 +5,7 @@ Wetcd.Router.map(function() {
 });
 
 Wetcd.Key = Ember.Object.extend({
+  deleted: false,
   editing: false,
   key_path: '',
 
@@ -12,6 +13,15 @@ Wetcd.Key = Ember.Object.extend({
     if (this.value != new_value) {
       $.post("/v1/" + this.key_path, {value: new_value});
       this.set('value', new_value);
+    }
+  },
+  delete: function() {
+    if (!this.get('deleted')) {
+      $.ajax({
+        type: "DELETE",
+        url: "/v1/" + this.key_path
+      });
+      this.set('value', '<em>deleted</em>');
     }
   }
 });
@@ -55,11 +65,17 @@ Wetcd.KeysRoute = Ember.Route.extend({
 Wetcd.KeyController = Ember.ObjectController.extend({
   actions: {
     edit: function() {
-      this.set('editing', true);
+      if (!this.get('deleted')) {
+        this.set('editing', true);
+      }
     },
     save: function() {
       this.content.save(this.get('value'));
       this.set('editing', false);
+    },
+    delete: function() {
+      this.content.delete();
+      this.set('deleted', true);
     }
   }
 });
