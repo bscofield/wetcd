@@ -34,6 +34,15 @@
       <p>Loading...</p>
     </td></tr>
   {{/each}}
+
+    <tr>
+      <td></td>
+      <td class="key">{{input type="text" value=newKey placeholder="/key"}}</td>
+      <td>{{input type="text" value=newValue placeholder="value"}}</td>
+      <td>
+	<button {{ action 'createKey' }} class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-plus"></span></button>
+      </td>
+    </tr>
   </table>
   </script>
 
@@ -46,7 +55,7 @@
     {{else}}
       <td>
       {{#if editing}}
-        <button {{ action 'save' }} class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-save"></span></button>
+	<button {{ action 'update' }} class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-save"></span></button>
       {{else}}
         <button {{ action 'edit' }} class="btn btn-link btn-sm"><span class="glyphicon glyphicon-pencil"></span></button>
       {{/if}}
@@ -56,7 +65,7 @@
       </td>
       <td>
       {{#if editing}}
-        {{edit-value class="edit" value=value insert-newline="save"}}
+	{{edit-value class="edit" value=value insert-newline="update"}}
       {{else}}
         {{{value}}}
       {{/if}}

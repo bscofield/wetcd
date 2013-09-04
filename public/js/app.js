@@ -28,6 +28,9 @@ Wetcd.Key = Ember.Object.extend({
 
 Wetcd.Etcd = Ember.Object.extend({});
 Wetcd.Etcd.reopenClass({
+  createKey: function(new_key, new_value) {
+    $.post("/v1/keys" + new_key, {value: new_value});
+  },
   keys: function(key) {
     var path = '';
     if (key != '') { path = key.replace( new RegExp("^\/+"), ''); }
@@ -57,8 +60,16 @@ Wetcd.IndexRoute = Ember.Route.extend({
 });
 
 Wetcd.KeysRoute = Ember.Route.extend({
+  newKey: '',
+  newValue: '',
+
   model: function(params) {
     return Wetcd.Etcd.keys(params.key);
+  },
+  actions: {
+    createKey: function() {
+      Wetcd.Etcd.createKey(this.controller.get('newKey'), this.controller.get('newValue'));
+    }
   }
 });
 
@@ -69,7 +80,7 @@ Wetcd.KeyController = Ember.ObjectController.extend({
         this.set('editing', true);
       }
     },
-    save: function() {
+    update: function() {
       this.content.save(this.get('value'));
       this.set('editing', false);
     },
