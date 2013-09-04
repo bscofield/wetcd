@@ -75,7 +75,11 @@
 
   <div class="row">
     <div class="col-md-12">
-      <h2>Browse <small class="pull-right">Double-click on a key to edit or delete it</small></h2>
+      <h2>
+        Browse
+        <small class="pull-right"><p>Double-click on a key to edit or delete it</p></small>
+        <small class="pull-right" style="clear:right"><p>{{#link-to 'keys' 'keys'}}Back to the root{{/link-to}}</p></small>
+      </h2>
 
       <table class="table">
         {{#each itemController="key"}}
