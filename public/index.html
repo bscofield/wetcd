@@ -16,6 +16,9 @@
       <div class="navbar-header">
         <a class="navbar-brand" href="/">wetcd</a>
       </div>
+      <div id="add-key-button" class="pull-right">
+        <button data-toggle="collapse" data-target="#add-key" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-plus"></span></button>
+      </div>
     </div>
   </div>
 
@@ -25,60 +28,79 @@
   </script>
 
   <script type="text/x-handlebars" id="keys">
+  <div class="row">
+    <div id="add-key" class="collapse col-md-12">
+      <h2>Add</h2>
 
-  <table>
-  {{#each itemController="key"}}
-    {{ partial "key" }}
-  {{else}}
-    <tr><td>
-      <p>Loading...</p>
-    </td></tr>
-  {{/each}}
+      <form class="form-inline">
+        <div class="form-group col-md-3">
+          <label class="sr-only" for="new-value">Key</label>
+          {{input type="text" id="new-key" class="form-control input-sm" value=newKey placeholder="/new-key"}}
+        </div>
+        <div class="form-group col-md-5">
+          <label class="sr-only" for="new-value">Value</label>
+          {{input type="text" id="new-value" class="form-control input-sm" value=newValue placeholder="new value"}}
+        </div>
+        <div class="form-group col-md-2">
+          <label class="sr-only" for="new-ttl">TTL</label>
+          {{input type="text" id="new-ttl" class="form-control input-sm" value=newTTL placeholder="TTL"}}
+        </div>
+        <button {{ action 'createKey' }} class="btn btn-primary btn-sm pull-right"><span class="glyphicon glyphicon-save"></span> Save</button>
+      </form>
+    </div>
+  </div>
 
-    <tr>
-      <td></td>
-      <td class="key">{{input type="text" value=newKey placeholder="/key"}}</td>
-      <td>{{input type="text" value=newValue placeholder="value"}}</td>
-      <td>
-	<button {{ action 'createKey' }} class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-plus"></span></button>
-      </td>
-    </tr>
-  </table>
+  <div class="row">
+    <div id="edit-key" class="collapse col-md-12">
+      <h2>Manage</h2>
+
+      <form class="form-inline">
+        <div class="form-group col-md-3">
+          <label class="sr-only" for="update-value">Key</label>
+          {{input type="text" id="update-key" disabled=disabled class="disabled form-control input-sm" value=newKey}}
+        </div>
+        <div class="form-group col-md-5">
+          <label class="sr-only" for="update-value">Value</label>
+          {{input type="text" id="update-value" class="form-control input-sm" value=newValue}}
+        </div>
+        <div class="form-group col-md-2">
+          <label class="sr-only" for="update-ttl">TTL</label>
+          {{input type="text" id="update-ttl" class="form-control input-sm" value=newTTL placeholder="TTL"}}
+        </div>
+        <button id="del-button" class="btn btn-danger btn-sm pull-right"><span class="glyphicon glyphicon-trash"></span> Delete</button>
+        <button {{ action 'createKey' }} class="btn btn-primary btn-sm pull-right"><span class="glyphicon glyphicon-save"></span> Save</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <h2>Browse <small class="pull-right">Double-click on a key to edit or delete it</small></h2>
+
+      <table class="table">
+        {{#each itemController="key"}}
+          {{ partial "key" }}
+        {{/each}}
+      </table>
+    </div>
+  </div>
   </script>
 
   <script type="text/x-handlebars" id="key">
     <tr>
-    {{#if dir}}
-      <td></td>
-      <td class="key"><strong>{{#link-to 'keys' key_path}}{{key}} &raquo;{{/link-to}}</strong></td>
-      <td></td>
-    {{else}}
-      <td>
-      {{#if editing}}
-	<button {{ action 'update' }} class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-save"></span></button>
-      {{else}}
-        <button {{ action 'edit' }} class="btn btn-link btn-sm"><span class="glyphicon glyphicon-pencil"></span></button>
-      {{/if}}
-      </td>
-      <td class="key">
-        <strong>{{key}}</strong>
-      </td>
-      <td>
-      {{#if editing}}
-	{{edit-value class="edit" value=value insert-newline="update"}}
-      {{else}}
-        {{{value}}}
-      {{/if}}
-      </td>
-
-      <td>
-        {{#if deleted}}
-
-        {{else}}
-          <button {{ action 'delete' }} class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-trash"></span></button>
+      <td class="key col-md-4">
+        <button class="btn-txt" {{ action "expandManage" key value on="doubleClick" }}>{{ key }}</button>
+        {{#if ttl}}
+        <small><em>expires at 2013-10-01 00:00:00</em></small>
         {{/if}}
       </td>
-    {{/if}}
+      <td class="col-md-8">
+      {{#if dir}}
+        {{#link-to 'keys' key_path}}directory &raquo;{{/link-to}}
+      {{else}}
+        {{ value }}
+      {{/if}}
+      </td>
     </tr>
   </script>
 
@@ -86,5 +108,6 @@
   <script src="js/libs/handlebars-1.0.0.js"></script>
   <script src="js/libs/ember-1.0.0.js"></script>
   <script src="js/app.js"></script>
+  <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
 </body>
 </html>

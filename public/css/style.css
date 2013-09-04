@@ -1,16 +1,35 @@
 body {
   padding-top: 50px;
 }
-
-table {
-  margin-top: 30px;
-}
 td {
   padding: 5px 1em;
+  word-wrap: break-word;
 }
 td.key {
-  border-right: 2px solid #ccc;
+  text-align: right;
+}
+td.key em {
+  display: block;
+  font-weight: normal;
 }
 table.edit-true {
   background-color: #ffe;
+}
+
+#add-key-button {
+  padding-top: 10px;
+}
+#del-button {
+  margin-left: 1em;
+}
+body h2 small {
+  font-size: 12px;
+}
+
+.btn-txt {
+  background-color: transparent;
+  border: none;
+  font-weight: bold;
+  margin: 0;
+  padding: 0;
 }
