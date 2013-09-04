@@ -1,4 +1,4 @@
-Wetcd = Ember.Application.create();
+Wetcd = Ember.Application.create({});
 
 Wetcd.Router.map(function() {
   this.resource('keys', { path: '*key' });
@@ -10,10 +10,7 @@ Wetcd.Key = Ember.Object.extend({
   key_path: '',
 
   save: function(new_value) {
-    if (this.value != new_value) {
-      $.post("/v1/" + this.key_path, {value: new_value});
-      this.set('value', new_value);
-    }
+    $.post("/v1/" + this.key_path, {value: new_value});
   },
   delete: function() {
     if (!this.get('deleted')) {
@@ -69,9 +66,6 @@ Wetcd.KeysRoute = Ember.Route.extend({
   actions: {
     createKey: function() {
       Wetcd.Etcd.createKey(this.controller.get('newKey'), this.controller.get('newValue'));
-    },
-    expandManage: function(k,v) {
-      $('#edit-key').collapse('show');
     }
   }
 });
@@ -83,12 +77,17 @@ Wetcd.KeyController = Ember.ObjectController.extend({
         this.set('editing', true);
       }
     },
+    cancel: function() {
+      this.set('editing', false);
+    },
     update: function() {
+      console.log(this.get('value'));
       this.content.save(this.get('value'));
       this.set('editing', false);
     },
     delete: function() {
       this.content.delete();
+      this.set('editing', false);
       this.set('deleted', true);
     }
   }

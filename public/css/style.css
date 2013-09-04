@@ -2,10 +2,14 @@ body {
   padding-top: 50px;
 }
 td {
+  min-height: 30px;
   padding: 5px 1em;
   word-wrap: break-word;
 }
-td.key {
+td button, td a, td span {
+  line-height: 30px;
+}
+.key-field, td.key {
   text-align: right;
 }
 td.key em {

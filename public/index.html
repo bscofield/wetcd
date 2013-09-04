@@ -51,29 +51,6 @@
   </div>
 
   <div class="row">
-    <div id="edit-key" class="collapse col-md-12">
-      <h2>Manage</h2>
-
-      <form class="form-inline">
-        <div class="form-group col-md-3">
-          <label class="sr-only" for="update-value">Key</label>
-          {{input type="text" id="update-key" disabled=disabled class="disabled form-control input-sm" value=newKey}}
-        </div>
-        <div class="form-group col-md-5">
-          <label class="sr-only" for="update-value">Value</label>
-          {{input type="text" id="update-value" class="form-control input-sm" value=newValue}}
-        </div>
-        <div class="form-group col-md-2">
-          <label class="sr-only" for="update-ttl">TTL</label>
-          {{input type="text" id="update-ttl" class="form-control input-sm" value=newTTL placeholder="TTL"}}
-        </div>
-        <button id="del-button" class="btn btn-danger btn-sm pull-right"><span class="glyphicon glyphicon-trash"></span> Delete</button>
-        <button {{ action 'createKey' }} class="btn btn-primary btn-sm pull-right"><span class="glyphicon glyphicon-save"></span> Save</button>
-      </form>
-    </div>
-  </div>
-
-  <div class="row">
     <div class="col-md-12">
       <h2>
         Browse
@@ -91,21 +68,53 @@
   </script>
 
   <script type="text/x-handlebars" id="key">
+  {{#if editing}}
+  {{ partial "edit-key" }}
+  {{else}}
+  {{ partial "view-key" }}
+  {{/if}}
+  </script>
+
+  <script type="text/x-handlebars" id="view-key">
     <tr>
-      <td class="key col-md-4">
-        <button class="btn-txt" {{ action "expandManage" key value on="doubleClick" }}>{{ key }}</button>
+      <td class="key col-md-3">
+        {{#if dir}}
+          <button class="btn-txt">{{ key }}</button>
+        {{else}}
+          <button class="btn-txt" {{ action "edit" on="doubleClick" }}>{{ key }}</button>
+        {{/if}}
         {{#if ttl}}
         <small><em>expires at 2013-10-01 00:00:00</em></small>
         {{/if}}
       </td>
-      <td class="col-md-8">
+      <td class="col-md-9">
       {{#if dir}}
         {{#link-to 'keys' key_path}}directory &raquo;{{/link-to}}
       {{else}}
-        {{ value }}
+        <span>{{{ value }}}</span>
       {{/if}}
       </td>
     </tr>
+  </script>
+
+  <script type="text/x-handlebars" id="edit-key">
+  <tr><td colspan="3">
+    <form class="form-inline">
+      <div class="form-group col-md-3 key-field">
+        <button class="btn-txt" {{ action "cancel" on="doubleClick" }}>{{ key }}</button>
+      </div>
+      <div class="form-group col-md-5">
+        <label class="sr-only" for="update-value">Value</label>
+        {{edit-value class="form-control input-sm" value=value}}
+      </div>
+      <div class="form-group col-md-2">
+        <label class="sr-only" for="update-ttl">TTL</label>
+        {{edit-value class="form-control input-sm" value=ttl placeholder="TTL"}}
+      </div>
+      <button {{ action 'delete' }} id="del-button" class="btn btn-danger btn-sm pull-right"><span class="glyphicon glyphicon-trash"></span> Delete</button>
+      <button {{ action 'update' }} class="btn btn-primary btn-sm pull-right"><span class="glyphicon glyphicon-save"></span> Save</button>
+    </form>
+  </td></tr>
   </script>
 
   <script src="js/libs/jquery-1.9.1.js"></script>
