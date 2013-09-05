@@ -9,8 +9,12 @@ Wetcd.Key = Ember.Object.extend({
   editing: false,
   key_path: '',
 
-  save: function(new_value) {
-    $.post("/v1/" + this.key_path, {value: new_value});
+  save: function(newValue, newTTL) {
+    params = {value: newValue};
+    if (typeof newTTL != "undefined" && newTTL != "") {
+      params.ttl = newTTL;
+    }
+    $.post("/v1/" + this.key_path, params);
   },
   delete: function() {
     if (!this.get('deleted')) {
@@ -25,8 +29,12 @@ Wetcd.Key = Ember.Object.extend({
 
 Wetcd.Etcd = Ember.Object.extend({});
 Wetcd.Etcd.reopenClass({
-  createKey: function(new_key, new_value) {
-    $.post("/v1/keys" + new_key, {value: new_value});
+  createKey: function(newKey, newValue, newTTL) {
+    params = {value: newValue};
+    if (typeof newTTL != "undefined" && newTTL != "") {
+      params.ttl = newTTL;
+    }
+    $.post("/v1/keys" + newKey, params);
   },
   keys: function(key) {
     var path = '';
@@ -70,7 +78,7 @@ Wetcd.KeysRoute = Ember.Route.extend({
       if (newKey[0] != '/') {
         newKey = '/'+newKey;
       }
-      Wetcd.Etcd.createKey(newKey, this.controller.get('newValue'));
+      Wetcd.Etcd.createKey(newKey, this.controller.get('newValue'), this.controller.get('newTTL'));
 
       parent = findParent(newKey);
       this.controller.set('model', Wetcd.Etcd.keys(parent));
@@ -96,8 +104,7 @@ Wetcd.KeyController = Ember.ObjectController.extend({
       this.set('editing', false);
     },
     update: function() {
-      console.log(this.get('value'));
-      this.content.save(this.get('value'));
+      this.content.save(this.get('value'), this.get('ttl'));
       this.set('editing', false);
     },
     delete: function() {
@@ -117,6 +124,11 @@ Wetcd.EditValueView = Ember.TextField.extend({
 });
 
 Ember.Handlebars.helper('edit-value', Wetcd.EditValueView);
+
+// uses moment.js
+Ember.Handlebars.helper('format-date', function(date) {
+  return moment(date).fromNow();
+});
 
 var findParent = function (str) {
   pieces = str.split('/');
