@@ -66,12 +66,13 @@ Wetcd.KeysRoute = Ember.Route.extend({
   actions: {
     createKey: function() {
       newKey = this.controller.get('newKey');
+      if (newKey[0] != '/') {
+        newKey = '/'+newKey;
+      }
       Wetcd.Etcd.createKey(newKey, this.controller.get('newValue'));
 
-      pieces = newKey.split('/');
-      pieces.pop();
-      pieces.unshift('keys')
-      this.controller.set('model', Wetcd.Etcd.keys(pieces.join('/')));
+      parent = findParent(newKey);
+      this.controller.set('model', Wetcd.Etcd.keys(parent));
 
       $('#add-key').collapse('hide');
     }
@@ -94,9 +95,11 @@ Wetcd.KeyController = Ember.ObjectController.extend({
       this.set('editing', false);
     },
     delete: function() {
+      parent = findParent(this.content.key);
       this.content.delete();
       this.set('editing', false);
       this.set('deleted', true);
+      this.parentController.set('content', Wetcd.Etcd.keys(parent));
     }
   }
 });
@@ -108,3 +111,10 @@ Wetcd.EditValueView = Ember.TextField.extend({
 });
 
 Ember.Handlebars.helper('edit-value', Wetcd.EditValueView);
+
+var findParent = function (str) {
+  pieces = str.split('/');
+  pieces.pop();
+  pieces.unshift('keys')
+  return pieces.join('/')
+}
