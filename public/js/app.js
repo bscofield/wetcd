@@ -46,6 +46,7 @@ Wetcd.Etcd.reopenClass({
         list.pushObject(Wetcd.Key.create(data));
       }
     });
+
     return list;
   }
 });
@@ -77,6 +78,11 @@ Wetcd.KeysRoute = Ember.Route.extend({
       $('#add-key').collapse('hide');
     }
   }
+});
+
+Wetcd.KeysController = Ember.ArrayController.extend({
+  sortProperties: ['key'],
+  sortAscending: true
 });
 
 Wetcd.KeyController = Ember.ObjectController.extend({
