@@ -65,7 +65,15 @@ Wetcd.KeysRoute = Ember.Route.extend({
   },
   actions: {
     createKey: function() {
-      Wetcd.Etcd.createKey(this.controller.get('newKey'), this.controller.get('newValue'));
+      newKey = this.controller.get('newKey');
+      Wetcd.Etcd.createKey(newKey, this.controller.get('newValue'));
+
+      pieces = newKey.split('/');
+      pieces.pop();
+      pieces.unshift('keys')
+      this.controller.set('model', Wetcd.Etcd.keys(pieces.join('/')));
+
+      $('#add-key').collapse('hide');
     }
   }
 });
