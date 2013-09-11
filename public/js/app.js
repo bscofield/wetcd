@@ -10,11 +10,14 @@ Wetcd.Key = Ember.Object.extend({
   key_path: '',
 
   save: function(newValue, newTTL) {
-    params = {value: newValue};
-    if (typeof newTTL != "undefined" && newTTL != "") {
-      params.ttl = newTTL;
+    if (this.oldValue != newValue) {
+      params = {value: newValue, prevValue: this.oldValue};
+      if (typeof newTTL != "undefined" && newTTL != "") {
+        params.ttl = newTTL;
+      }
+      $.post("/v1/" + this.key_path, params);
+      this.oldValue = newValue;
     }
-    $.post("/v1/" + this.key_path, params);
   },
   delete: function() {
     if (!this.get('deleted')) {
@@ -46,10 +49,12 @@ Wetcd.Etcd.reopenClass({
       var data = $.parseJSON(response);
       if (Ember.isArray(data)) {
         data.forEach(function (k) {
+          k['oldValue'] = k['value'];
           k['key_path'] = 'keys'+k['key'];
           list.pushObject(Wetcd.Key.create(k));
         });
       } else {
+        data['oldValue'] = data['value'];
         data['key_path'] = 'keys'+data['key'];
         list.pushObject(Wetcd.Key.create(data));
       }
