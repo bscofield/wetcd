@@ -7,16 +7,23 @@ Wetcd.Router.map(function() {
 Wetcd.Key = Ember.Object.extend({
   deleted: false,
   editing: false,
+  errorMessage: null,
   key_path: '',
 
   save: function(newValue, newTTL) {
+    var result = true;
     if (this.oldValue != newValue) {
+      var keyObj = this;
       params = {value: newValue, prevValue: this.oldValue};
       if (typeof newTTL != "undefined" && newTTL != "") {
         params.ttl = newTTL;
       }
-      $.post("/v1/" + this.key_path, params);
-      this.oldValue = newValue;
+      $.post("/v1/" + this.key_path, params, function() {
+        this.oldValue = newValue;
+      }).fail(function(resp) {
+        keyObj.set('errorMessage', $.parseJSON(resp.responseText)['message']);
+        result = false;
+      });
     }
   },
   delete: function() {
@@ -109,8 +116,9 @@ Wetcd.KeyController = Ember.ObjectController.extend({
       this.set('editing', false);
     },
     update: function() {
-      this.content.save(this.get('value'), this.get('ttl'));
-      this.set('editing', false);
+      if (this.content.save(this.get('value'), this.get('ttl'))) {
+        this.set('editing', false);
+      }
     },
     delete: function() {
       parent = findParent(this.content.key);

@@ -99,6 +99,11 @@
 
   <script type="text/x-handlebars" id="edit-key">
   <tr><td colspan="3">
+    {{#if errorMessage}}
+    <div class="alert alert-danger">
+      {{ errorMessage }}
+    </div>
+    {{/if}}
     <form class="form-inline">
       <div class="form-group col-md-3 key-field">
         <button class="btn-txt" {{ action "cancel" on="doubleClick" }}>{{ key }}</button>
