@@ -1,3 +1,5 @@
+**NOTE:** Etcd is now distributed with its own web interface. Look at the [dashboard module](https://github.com/coreos/etcd/tree/master/mod/dashboard) for more details.
+
 A simple UI for [etcd](https://github.com/coreos/etcd)
 
 ## Running without Vagrant
